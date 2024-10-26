@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Stats</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Fonction pour récupérer les données via AJAX et mettre à jour le tableau
+        function fetchWalletStats() {
+            $.ajax({
+                url: '/wallet/api/wallet_stats',  // URL de l'API qui renvoie les données
+                method: 'GET',
+                success: function(data) {
+                    // Vider le tableau avant de le remplir
+                    $('#wallet-stats-table tbody').empty();
+
+                    // Remplir le tableau avec les nouvelles données
+                    data.forEach(function(stat) {
+                        $('#wallet-stats-table tbody').append(
+                            `<tr>
+                                <td>${stat.id}</td>
+                                <td>${stat.address}</td>
+                                <td>${stat.gross_profit}</td>
+                                <td>${stat.win_rate}</td>
+                                <td>${stat.total_roi}</td>
+                                <td>${stat.volume}</td>
+                                <td>${stat.total_traded}</td>
+                                <td>${stat.total_token_traded}</td>
+                            </tr>`
+                        );
+                    });
+                }
+            });
+        }
+
+        // Mettre à jour les données toutes les 5 secondes
+        setInterval(fetchWalletStats, 5000);
+
+        // Charger les données immédiatement au chargement de la page
+        $(document).ready(function() {
+            fetchWalletStats();
+        });
+    </script>
+</head>
+<body>
+    <h1>Liste des Wallets Stats</h1>
+    <table border="1" id="wallet-stats-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Address</th>
+                <th>Gross Profit</th>
+                <th>Win Rate</th>
+                <th>Total ROI</th>
+                <th>Volume</th>
+                <th>Total Traded</th>
+                <th>Total Token Traded</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les données seront insérées ici par JavaScript -->
+        </tbody>
+    </table>
+</body>
+</html>
